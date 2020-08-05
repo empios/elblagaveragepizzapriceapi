@@ -19,3 +19,5 @@ def calculateSurfaceOverPrice():
 
         priceOverSurface = x/takeMenuNaWynos.averagePrice[allPizzaSurface.index(x)]
         allPizzaPriceBySurface.append(priceOverSurface)
+
+calculateSurfaceOverPrice()

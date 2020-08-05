@@ -6,5 +6,4 @@ app = FastAPI()
 
 @app.get("/")
 async def root():
-    calculatePizzaSize.calculateSurfaceOverPrice()
     return {"pizzapricebysurface": calculatePizzaSize.allPizzaPriceBySurface}

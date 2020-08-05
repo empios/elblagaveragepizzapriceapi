@@ -47,3 +47,5 @@ def getPizzaPrice(restaurantId):
 
 for x in range(len(allRestaurantsArr)):
     getPizzaPrice(x)
+
+print(allRestaurantsArr)
