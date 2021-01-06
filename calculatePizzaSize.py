@@ -1,7 +1,6 @@
-from operator import index
-
 import takeMenuNaWynos
 import math
+import Database
 
 allPizzaSurface = []
 allPizzaPriceBySurface = []
@@ -16,8 +15,11 @@ def calculateSize():
 def calculateSurfaceOverPrice():
     calculateSize()
     for x in allPizzaSurface:
-
-        priceOverSurface = x/takeMenuNaWynos.averagePrice[allPizzaSurface.index(x)]
+        priceOverSurface = x / takeMenuNaWynos.averagePrice[allPizzaSurface.index(x)]
         allPizzaPriceBySurface.append(priceOverSurface)
 
+
 calculateSurfaceOverPrice()
+
+for x,y in zip(takeMenuNaWynos.allRestaurantsArr, allPizzaPriceBySurface):
+    Database.Restaurant.create(name=x, calculated=y)

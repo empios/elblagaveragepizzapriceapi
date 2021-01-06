@@ -1,5 +1,6 @@
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
+import Database
 
 mainMenuHTML = urlopen("https://www.portel.pl/nawynos/kuchnia/pizza")
 bsMainMenu = BeautifulSoup(mainMenuHTML.read(), 'html.parser')
@@ -7,6 +8,8 @@ allRestaurantsArr = []
 allRestaurantLinks = []
 averageSize = [40, 32, 40, 32, 37, 34, 30, 30, 36, 42, 35, 37, 40, 41, 32, 30]
 averagePrice = []
+pizzaName = []
+pizzaPrice = []
 
 restaurantNameHTML = bsMainMenu.find_all("h2")
 
@@ -21,19 +24,16 @@ allRestaurantsArr.pop(0)
 
 
 def getPizzaName(restaurantId):
-    pizzaName = []
     restaurantSite = urlopen(allRestaurantLinks[restaurantId])
     bsRestaurant = BeautifulSoup(restaurantSite.read(), 'html.parser')
     pizzaNameHTML = bsRestaurant.find_all("div", class_='nazwa')
     for x in pizzaNameHTML:
         slicedName = x.get_text().strip()
         pizzaName.append(slicedName)
-    print(pizzaName)
 
 
 def getPizzaPrice(restaurantId):
     tempAvgPrice = 0
-    pizzaPrice = []
     restaurantSite = urlopen(allRestaurantLinks[restaurantId])
     bsRestaurant = BeautifulSoup(restaurantSite.read(), 'html.parser')
     pizzaPriceHTML = bsRestaurant.find_all("div", attrs={'data-cena': True})
@@ -42,10 +42,14 @@ def getPizzaPrice(restaurantId):
 
     for y in range(len(pizzaPrice)):
         tempAvgPrice += float(pizzaPrice[y])
-    averagePrice.append(tempAvgPrice/len(pizzaPrice))
+    averagePrice.append(tempAvgPrice / len(pizzaPrice))
 
 
 for x in range(len(allRestaurantsArr)):
     getPizzaPrice(x)
+    getPizzaName(x)
 
-print(allRestaurantsArr)
+with Database.db.atomic():
+    for x in allRestaurantsArr:
+        for y, z in zip(pizzaName, pizzaPrice):
+            Database.Menu.create(restaurant=x, name=y, price=z)
