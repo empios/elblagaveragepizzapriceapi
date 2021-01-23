@@ -1,26 +1,22 @@
 from fastapi import *
-from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware import Middleware
+from starlette.middleware.cors import CORSMiddleware
 import calculatePizzaSize
 import Database
 import Models
 
 calculatePizzaSize.initFile()
 
-app = FastAPI()
-
 origins = [
     "http://labproj18-front-route-labproj18.apps.cp4apps.cloudpak.site/",
     "http://labproj18-front-route-labproj18.apps.cp4apps.cloudpak.site/checkpizza"
 ]
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+middleware = [
+    Middleware(CORSMiddleware, allow_origins=origins)
+]
 
+app = FastAPI(middleware=middleware)
 
 sleep_time = 150
 
