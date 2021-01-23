@@ -1,7 +1,7 @@
 from peewee import *
 
 db = SqliteDatabase('database.db')
-
+db.connect(reuse_if_open=True)
 
 class BaseModel(Model):
     class Meta:
@@ -19,6 +19,6 @@ class Menu(BaseModel):
     price = DecimalField()
 
 
-db.connect()
-db.drop_tables([Restaurant, Menu])
-db.create_tables([Restaurant, Menu])
+def createAndDrop():
+    db.drop_tables([Restaurant, Menu])
+    db.create_tables([Restaurant, Menu])

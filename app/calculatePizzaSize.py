@@ -21,5 +21,10 @@ def calculateSurfaceOverPrice():
 
 calculateSurfaceOverPrice()
 
-for x,y in zip(takeMenuNaWynos.allRestaurantsArr, allPizzaPriceBySurface):
+for x, y in zip(takeMenuNaWynos.allRestaurantsArr, allPizzaPriceBySurface):
     Database.Restaurant.create(name=x, calculated=y)
+
+
+def selectAll():
+    select = Database.Restaurant.select()
+    return select
