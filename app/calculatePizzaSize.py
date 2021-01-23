@@ -4,6 +4,7 @@ import Models
 
 allPizzaSurface = []
 allPizzaPriceBySurface = []
+allRestaurantsArr = takeMenuNaWynos.allRestaurantsArr
 
 def initFile():
     print("I am working")
@@ -22,9 +23,7 @@ def calculateSurfaceOverPrice():
 
 
 calculateSurfaceOverPrice()
-
-for x, y in zip(takeMenuNaWynos.allRestaurantsArr, allPizzaPriceBySurface):
-    Models.Restaurant.create(name=x, calculated=y)
+Models.insertRes(allRestaurantsArr, allPizzaPriceBySurface)
 
 
 
