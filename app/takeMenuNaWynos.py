@@ -11,7 +11,6 @@ averagePrice = []
 pizzaName = []
 pizzaPrice = []
 
-Models.createAndDrop()
 restaurantNameHTML = bsMainMenu.find_all("h2")
 
 for div in bsMainMenu.find_all("div", class_='rest'):

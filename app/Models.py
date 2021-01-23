@@ -25,6 +25,7 @@ def createAndDrop():
 
 
 def insertMenu(allRestaurantsArr, pizzaName, pizzaPrice):
+    createAndDrop()
     with db.atomic():
         for x in allRestaurantsArr:
             for y, z in zip(pizzaName, pizzaPrice):
