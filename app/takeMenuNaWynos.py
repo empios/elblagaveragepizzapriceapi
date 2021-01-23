@@ -1,6 +1,6 @@
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
-import Database
+import Models
 
 mainMenuHTML = urlopen("https://www.portel.pl/nawynos/kuchnia/pizza")
 bsMainMenu = BeautifulSoup(mainMenuHTML.read(), 'html.parser')
@@ -11,7 +11,7 @@ averagePrice = []
 pizzaName = []
 pizzaPrice = []
 
-Database.createAndDrop()
+Models.createAndDrop()
 restaurantNameHTML = bsMainMenu.find_all("h2")
 
 for div in bsMainMenu.find_all("div", class_='rest'):
@@ -50,7 +50,4 @@ for x in range(len(allRestaurantsArr)):
     getPizzaPrice(x)
     getPizzaName(x)
 
-with Database.db.atomic():
-    for x in allRestaurantsArr:
-        for y, z in zip(pizzaName, pizzaPrice):
-            Database.Menu.create(restaurant=x, name=y, price=z)
+Models.insertMenu(allRestaurantsArr, pizzaName, pizzaPrice)

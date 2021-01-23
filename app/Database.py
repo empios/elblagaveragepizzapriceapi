@@ -1,24 +1,25 @@
-from peewee import *
+import peewee
+from contextvars import ContextVar
 
-db = SqliteDatabase('database.db')
-db.connect(reuse_if_open=True)
-
-class BaseModel(Model):
-    class Meta:
-        database = db
+db_state_default = {"closed": None, "conn": None, "ctx": None, "transactions": None}
+db_state = ContextVar("db_state", default=db_state_default.copy())
 
 
-class Restaurant(BaseModel):
-    name = CharField()
-    calculated = DecimalField()
+class PeeweeConnectionState(peewee._ConnectionState):
+    def __init__(self, **kwargs):
+        super().__setattr__("_state", db_state)
+        super().__init__(**kwargs)
+
+    def __setattr__(self, name, value):
+        self._state.get()[name] = value
+
+    def __getattr__(self, name):
+        return self._state.get()[name]
 
 
-class Menu(BaseModel):
-    restaurant = ForeignKeyField(Restaurant, backref='restaurant')
-    name = CharField()
-    price = DecimalField()
+db = peewee.SqliteDatabase('database.db', check_same_thread=False)
+db._state = PeeweeConnectionState()
 
 
-def createAndDrop():
-    db.drop_tables([Restaurant, Menu])
-    db.create_tables([Restaurant, Menu])
+
+

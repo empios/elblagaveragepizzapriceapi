@@ -1,10 +1,12 @@
 import takeMenuNaWynos
 import math
-import Database
+import Models
 
 allPizzaSurface = []
 allPizzaPriceBySurface = []
 
+def initFile():
+    print("I am working")
 
 def calculateSize():
     for x in takeMenuNaWynos.averageSize:
@@ -22,9 +24,7 @@ def calculateSurfaceOverPrice():
 calculateSurfaceOverPrice()
 
 for x, y in zip(takeMenuNaWynos.allRestaurantsArr, allPizzaPriceBySurface):
-    Database.Restaurant.create(name=x, calculated=y)
+    Models.Restaurant.create(name=x, calculated=y)
 
 
-def selectAll():
-    select = Database.Restaurant.select()
-    return select
+
