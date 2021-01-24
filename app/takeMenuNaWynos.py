@@ -1,6 +1,5 @@
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
-import Models
 
 mainMenuHTML = urlopen("https://www.portel.pl/nawynos/kuchnia/pizza")
 bsMainMenu = BeautifulSoup(mainMenuHTML.read(), 'html.parser')
@@ -49,4 +48,3 @@ for x in range(len(allRestaurantsArr)):
     getPizzaPrice(x)
     getPizzaName(x)
 
-Models.insertMenu(allRestaurantsArr, pizzaName, pizzaPrice)

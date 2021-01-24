@@ -1,5 +1,4 @@
 from fastapi import *
-from starlette.middleware import Middleware
 from starlette.middleware.cors import CORSMiddleware
 import calculatePizzaSize
 import Database
@@ -9,14 +8,21 @@ calculatePizzaSize.initFile()
 
 origins = [
     "http://labproj18-front-route-labproj18.apps.cp4apps.cloudpak.site/",
-    "http://labproj18-front-route-labproj18.apps.cp4apps.cloudpak.site/checkpizza"
+    "http://labproj18-front-route-labproj18.apps.cp4apps.cloudpak.site/checkpizza",
+    "http://localhost:3000/"
 ]
 
-middleware = [
-    Middleware(CORSMiddleware, allow_origins=origins)
-]
 
-app = FastAPI(middleware=middleware)
+app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origin_regex='https?://.*',
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
+
 
 sleep_time = 150
 
@@ -43,13 +49,13 @@ response2 = {"restaurant": []}
 def root():
     restaurant = Models.Restaurant.select()
     for rest in restaurant.dicts():
-        response['pizzapricebysurface'].append(rest['name'])
-    return response
+        response2['restaurant'].append(rest['name'])
+    return response2
 
 
 @app.get("/restaurant", dependencies=[Depends(get_db)])
 def restaurant():
     restaurant = Models.Restaurant.select()
     for rest in restaurant.dicts():
-        response2['restaurant'].append(rest['calculated'])
-    return response2
+        response['pizzapricebysurface'].append(rest['calculated'])
+    return response

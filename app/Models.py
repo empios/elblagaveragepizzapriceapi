@@ -24,18 +24,13 @@ def createAndDrop():
     db.create_tables([Restaurant, Menu])
 
 
-def insertMenu(allRestaurantsArr, pizzaName, pizzaPrice):
+def insertRes(allRestaurantsArr, allPizzaPriceBySurface, pizzaName, pizzaPrice):
     db.connect()
     createAndDrop()
     with db.atomic():
         for x in allRestaurantsArr:
             for y, z in zip(pizzaName, pizzaPrice):
                 Menu.create(restaurant=x, name=y, price=z)
-    db.close()
-
-
-def insertRes(allRestaurantsArr, allPizzaPriceBySurface):
-    db.connect()
-    for x, y in zip(allRestaurantsArr, allPizzaPriceBySurface):
-        Restaurant.create(name=x, calculated=y)
+        for x, y in zip(allRestaurantsArr, allPizzaPriceBySurface):
+            Restaurant.create(name=x, calculated=y)
     db.close()
